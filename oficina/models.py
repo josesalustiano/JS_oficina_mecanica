@@ -35,3 +35,12 @@ class Veiculo(models.Model):
 
     def __str__(self):
         return f"{self.modelo} - Placa: {self.placa}"
+
+class Procedimento(models.Model):
+    nome = models.CharField(max_length=100)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    tempo_estimado_minutos = models.IntegerField(help_text="Tempo estimado em minutos")
+    descricao = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.nome
