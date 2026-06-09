@@ -25,3 +25,13 @@ class Modelo(models.Model):
 
     def __str__(self):
         return f"{self.marca.nome} {self.nome}"
+    
+class Veiculo(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
+    categoria = models.CharField(max_length=50) # Ex: SUV, Hatch, Sedã
+    cor = models.CharField(max_length=30)
+    placa = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return f"{self.modelo} - Placa: {self.placa}"
