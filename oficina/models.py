@@ -44,3 +44,17 @@ class Procedimento(models.Model):
 
     def __str__(self):
         return self.nome
+    
+class OrdemServico(models.Model):
+    STATUS_CHOICES = [
+        ('ATIVO', 'Ativo'),
+        ('SUSPENSO', 'Suspenso/Desativado'),
+        ('FINALIZADO', 'Finalizado'),
+    ]
+    veiculo = models.ForeignKey(Veiculo, on_delete=models.PROTECT)
+    procedimento = models.ForeignKey(Procedimento, on_delete=models.PROTECT)
+    data = models.DateField()
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='ATIVO')
+
+    def __str__(self):
+        return f"OS #{self.id} - {self.veiculo.modelo.nome} ({self.status})"
