@@ -58,3 +58,12 @@ class OrdemServico(models.Model):
 
     def __str__(self):
         return f"OS #{self.id} - {self.veiculo.modelo.nome} ({self.status})"
+    
+class Cobranca(models.Model):
+    ordem_servico = models.OneToOneField(OrdemServico, on_delete=models.CASCADE)
+    valor_total = models.DecimalField(max_digits=10, decimal_places=2)
+    data_emissao = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cobrança da OS #{self.ordem_servico.id}"
+    
