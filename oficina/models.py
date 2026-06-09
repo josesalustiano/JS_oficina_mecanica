@@ -67,3 +67,11 @@ class Cobranca(models.Model):
     def __str__(self):
         return f"Cobrança da OS #{self.ordem_servico.id}"
     
+class Pagamento(models.Model):
+    cobranca = models.ForeignKey(Cobranca, on_delete=models.CASCADE)
+    valor_pago = models.DecimalField(max_digits=10, decimal_places=2)
+    data = models.DateField()
+    metodo_pagamento = models.CharField(max_length=50) # Ex: Cartão, Pix, Dinheiro
+
+    def __str__(self):
+        return f"Pagamento de R$ {self.valor_pago} para Cobrança #{self.cobranca.id}"
