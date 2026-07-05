@@ -1,13 +1,19 @@
-from django.shortcuts import render
-from .models import Cliente
+from django.shortcuts import render, get_object_or_404
+from .models import Cliente, Veiculo
 
-def dashboard(request):
-    # Lógica da tela inicial / painel de controle
-    return render(request, 'oficina/dashboard.html')
+def Dashboard(request):
+    return render(request, 'oficina/Dashboard.html')
 
-def lista_clientes(request):
-    # Vai ao banco de dados e pega todos os clientes
-    clientes_do_banco = Cliente.objects.all() 
+def TelaClientes(request):
+    busca = request.GET.get('busca') 
+    if busca:
+        clientes_do_banco = Cliente.objects.filter(nome__icontains=busca) | Cliente.objects.filter(cpf__icontains=busca)
+    else:
+        clientes_do_banco = Cliente.objects.all() 
     
-    # Manda esses clientes para um arquivo HTML
-    return render(request, 'oficina/lista_clientes.html', {'clientes': clientes_do_banco})
+    return render(request, 'oficina/TelaClientes.html', {'clientes': clientes_do_banco})
+
+def DetalhesClientes(request, cpf):
+    cliente = get_object_or_404(Cliente, cpf=cpf)
+    veiculos = cliente.veiculo_set.all()
+    return render(request, 'oficina/DetalhesClientes.html', {'cliente': cliente, 'veiculos': veiculos})
