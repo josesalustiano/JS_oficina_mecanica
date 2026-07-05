@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Clientes - JS Mecânica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark mb-4" style="background-color: #0d2b56;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">JS Mecânica</a>
+            <a href="#" class="btn btn-warning btn-sm text-white fw-bold">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container bg-white p-4 rounded shadow-sm">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0">Módulo de Clientes</h2>
+            <a href="#" class="btn btn-dark fw-bold">+ Cadastrar Novo Cliente</a>
+        </div>
+
+        <form method="GET" action="/clientes/" class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">🔍</span>
+                <input type="text" name="busca" class="form-control border-start-0 bg-light" placeholder="Buscar cliente por nome ou CPF...">
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>CPF</th>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'DetalhesClientes' cliente.cpf %}" class="text-decoration-none text-secondary">
+                                {{ cliente.cpf }}
+                            </a>
+                        </td>
+                        <td class="fw-bold text-primary">{{ cliente.nome }}</td>
+                        <td class="text-secondary">{{ cliente.telefone }}</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-sm btn-outline-warning fw-bold">Editar</a>
+                            <a href="#" class="btn btn-sm btn-outline-danger fw-bold">Excluir</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">Nenhum cliente encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>
