@@ -1,4 +1,5 @@
 from django.db import models
+import base64
 
 class Cliente(models.Model):
     # Mudança: CPF agora é a chave primária (ID) do Cliente
@@ -11,7 +12,12 @@ class Cliente(models.Model):
     cidade = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nome} (CPF: {self.cpf})"
+        return self.nome
+    
+    @property
+    def id_seguro(self):
+        # Transforma o CPF num código Base64 seguro para URL
+        return base64.urlsafe_b64encode(self.cpf.encode('utf-8')).decode('utf-8')
 
 class Veiculo(models.Model):
     # Mudança: Placa agora é a chave primária (ID) do Veículo

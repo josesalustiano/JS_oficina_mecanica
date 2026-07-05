@@ -19,7 +19,7 @@
         
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-dark mb-0">Módulo de Clientes</h2>
-            <a href="#" class="btn btn-dark fw-bold">+ Cadastrar Novo Cliente</a>
+            <a href="{% url 'CadastrarCliente' %}" class="btn btn-dark fw-bold">+ Cadastrar Novo Cliente</a>
         </div>
 
         <form method="GET" action="/clientes/" class="mb-4">
@@ -43,15 +43,15 @@
                     {% for cliente in clientes %}
                     <tr>
                         <td>
-                            <a href="{% url 'DetalhesClientes' cliente.cpf %}" class="text-decoration-none text-secondary">
+                            <a href="{% url 'DetalhesClientes' cliente.id_seguro %}" class="text-decoration-none text-secondary">
                                 {{ cliente.cpf }}
                             </a>
                         </td>
                         <td class="fw-bold text-primary">{{ cliente.nome }}</td>
                         <td class="text-secondary">{{ cliente.telefone }}</td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-outline-warning fw-bold">Editar</a>
-                            <a href="#" class="btn btn-sm btn-outline-danger fw-bold">Excluir</a>
+                            <a href="{% url 'EditarCliente' cliente.id_seguro %}" class="btn btn-sm btn-outline-warning fw-bold">Editar</a>
+                            <a href="{% url 'ExcluirCliente' cliente.id_seguro %}" class="btn btn-sm btn-outline-danger fw-bold">Excluir</a>
                         </td>
                     </tr>
                     {% empty %}
