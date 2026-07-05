@@ -3,103 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Oficina Mecânica</title>
+    <title>Dashboard - JS Mecânica</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+    <style>
+        /* Estilos personalizados fiéis à sua imagem */
+        .navbar-custom {
+            background-color: #0b3560; /* Azul escuro da sua foto */
+        }
+        .btn-sair {
+            background-color: #f26122; /* Laranja exato do botão Sair */
+            color: white;
+            border: none;
+        }
+        .btn-sair:hover {
+            background-color: #d9531e;
+            color: white;
+        }
+        
+        /* Estilização dos Módulos (Botões quadrados) */
+        .module-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .module-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .module-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #9b51e0; /* Roxo da sua foto */
+            text-align: center;
+        }
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">⚙️ Oficina Salustiano</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-fluid navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/clientes/">Clientes</a></li>
-                </ul>
-            </div>
+        /* Cartão Especial: Gerenciar Equipe */
+        .module-card-equipe {
+            background-color: #f2a654; /* Laranja claro da sua foto */
+            border: none;
+        }
+        .module-card-equipe .module-text {
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <nav class="navbar navbar-custom py-3 mb-5">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand text-white fw-bold fs-4" href="{% url 'Dashboard' %}">JS Mecânica</a>
+            <a href="#" class="btn btn-sair fw-bold px-4 rounded-3">Sair</a>
         </div>
     </nav>
 
-    <div class="container">
-        <h1 class="mb-4 text-secondary fw-bold">Painel de Controle</h1>
+    <div class="container text-center mt-5">
+        <h1 class="fw-bold text-dark mb-2" style="font-size: 2.5rem;">Olá, junior!</h1>
+        <p class="text-secondary mb-5 fs-5">Clicando nesses botões navegue entre os módulos</p>
 
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <h5 class="card-title text-primary fw-bold">Buscar Cliente por CPF</h5>
-                    <form method="GET" action="#">
-                        <div class="input-group">
-                            <input type="text" name="busca_cpf" class="form-control" placeholder="000.000.000-00">
-                            <button class="btn btn-primary" type="submit">Buscar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <h5 class="card-title text-success fw-bold">Buscar Veículo por Placa</h5>
-                    <form method="GET" action="#">
-                        <div class="input-group">
-                            <input type="text" name="busca_placa" class="form-control" placeholder="ABC1D23">
-                            <button class="btn btn-success" type="submit">Buscar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <h5 class="card-title text-warning fw-bold">Buscar Veículo por CPF do Dono</h5>
-                    <form method="GET" action="#">
-                        <div class="input-group">
-                            <input type="text" name="busca_veiculo_cpf" class="form-control" placeholder="000.000.000-00">
-                            <button class="btn btn-warning text-white" type="submit">Buscar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="mb-3 text-secondary">Relatórios do Sistema</h3>
-        <div class="row g-3">
+        <div class="d-flex justify-content-center flex-wrap gap-3">
             
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 border-start border-primary border-4">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Ordens de Serviço (OS)</h5>
-                        <div class="d-grid gap-2 mt-3">
-                            <a href="#" class="btn btn-outline-secondary btn-sm text-start">📋 Todas as Ordens de Serviço</a>
-                            <a href="#" class="btn btn-outline-success btn-sm text-start">🟢 Todas as OS em Aberto / Ativas</a>
-                            <a href="#" class="btn btn-outline-danger btn-sm text-start">🔴 Todas as OS Suspensas</a>
-                            <a href="#" class="btn btn-outline-dark btn-sm text-start">✅ Todas as OS Pagas / Finalizadas</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="{% url 'TelaClientes' %}" class="module-card">
+                <span class="module-icon">👥</span>
+                <span class="module-text">Clientes</span>
+            </a>
 
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 border-start border-success border-4">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-success">Cadastros Gerais</h5>
-                        <div class="d-grid gap-2 mt-3">
-                            <a href="/clientes/" class="btn btn-outline-secondary btn-sm text-start">👥 Todos os Clientes</a>
-                            <a href="#" class="btn btn-outline-secondary btn-sm text-start">🚗 Todos os Veículos</a>
-                            <a href="#" class="btn btn-outline-secondary btn-sm text-start">🛠️ Todos os Procedimentos</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="#" class="module-card">
+                <span class="module-icon">🚗</span>
+                <span class="module-text">Veículos</span>
+            </a>
 
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 border-start border-info border-4">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-info">Financeiro & Pagamentos</h5>
-                        <div class="d-grid gap-2 mt-3">
-                            <a href="#" class="btn btn-outline-success btn-sm text-start">💰 Todos os Pagamentos Realizados</a>
-                            <a href="#" class="btn btn-outline-danger btn-sm text-start">⚠️ Todos os Pagamentos em Aberto</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="#" class="module-card">
+                <span class="module-icon">📋</span>
+                <span class="module-text">Ordens de<br>Serviço</span>
+            </a>
+
+            <a href="#" class="module-card">
+                <span class="module-icon">🛠️</span>
+                <span class="module-text">Procedimentos</span>
+            </a>
+
+            <a href="#" class="module-card">
+                <span class="module-icon">📦</span>
+                <span class="module-text">Insumos</span>
+            </a>
+
+            <a href="#" class="module-card module-card-equipe">
+                <span class="module-icon">⚙️</span>
+                <span class="module-text">Gerenciar<br>Equipe</span>
+            </a>
 
         </div>
     </div>
