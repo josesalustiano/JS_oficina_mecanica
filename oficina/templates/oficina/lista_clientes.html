@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Clientes</title>
+</head>
+<body>
+    <h1>Nossos Clientes</h1>
+    
+    <ul>
+        {% for cliente in clientes %}
+            <li>
+                <strong>{{ cliente.nome }}</strong> - CPF: {{ cliente.cpf }}
+            </li>
+        {% empty %}
+            <li>Nenhum cliente cadastrado ainda. Vá ao /admin para cadastrar!</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
