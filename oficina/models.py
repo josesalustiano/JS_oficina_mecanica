@@ -20,7 +20,7 @@ class Veiculo(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     marca = models.CharField(max_length=50, default="Não informada")
     modelo = models.CharField(max_length=50, default="Não informado")
-    ano = models.IntegerField(default=2024)
+    ano = models.IntegerField()
     categoria = models.CharField(max_length=50, blank=True, null=True) 
     cor = models.CharField(max_length=30)
 
