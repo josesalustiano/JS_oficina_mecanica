@@ -14,4 +14,9 @@ urlpatterns = [
     path('veiculos/<str:placa>/detalhes/', views.DetalhesVeiculos, name='DetalhesVeiculos'),
     path('veiculos/<str:placa>/editar/', views.EditarVeiculo, name='EditarVeiculo'),
     path('veiculos/<str:placa>/excluir/', views.ExcluirVeiculo, name='ExcluirVeiculo'),
+
+    path('procedimentos/', views.TelaProcedimentos, name='TelaProcedimentos'),
+    path('procedimentos/cadastrar/', views.CadastrarProcedimento, name='CadastrarProcedimento'),
+    path('procedimentos/<int:id>/editar/', views.EditarProcedimento, name='EditarProcedimento'),
+    path('procedimentos/<int:id>/excluir/', views.ExcluirProcedimento, name='ExcluirProcedimento'),
 ]
