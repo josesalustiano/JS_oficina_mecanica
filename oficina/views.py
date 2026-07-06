@@ -36,15 +36,39 @@ def DetalhesClientes(request, hash_id):
     return render(request, 'oficina/Cliente/DetalhesClientes.html', {'cliente': cliente, 'veiculos': veiculos})
 
 def CadastrarCliente(request):
+    aviso_reativar = False
+    cliente_suspenso = None
+
     if request.method == 'POST':
-        form = ClienteForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('TelaClientes')
+        cpf_digitado = request.POST.get('cpf')
+        # Procura se existe esse CPF desativado no banco
+        cliente_suspenso = Cliente.objects.filter(cpf=cpf_digitado, ativo=False).first()
+
+        if cliente_suspenso:
+            # Se o usuário visualizou o aviso e clicou no botão de confirmar reativação
+            if 'confirmar_reativacao' in request.POST:
+                cliente_suspenso.ativo = True
+                cliente_suspenso.save()
+                return redirect('TelaClientes')
+            
+            # Se ele apenas tentou cadastrar, ativa a bandeira do aviso na tela
+            aviso_reativar = True
+            form = ClienteForm(request.POST)
+        else:
+            # Fluxo normal para CPFs totalmente novos
+            form = ClienteForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('TelaClientes')
     else:
         form = ClienteForm()
-    # Usando o novo FormClientes unificado
-    return render(request, 'oficina/Cliente/FormClientes.html', {'form': form, 'titulo': 'Novo Cadastro de Cliente'})
+
+    return render(request, 'oficina/Cliente/FormClientes.html', {
+        'form': form,
+        'aviso_reativar': aviso_reativar,
+        'cliente_suspenso': cliente_suspenso
+    })
+
 
 def EditarCliente(request, hash_id):
     cpf_real = decodificar_id(hash_id)
@@ -83,14 +107,43 @@ def TelaVeiculos(request):
     return render(request, 'oficina/Veiculo/TelaVeiculos.html', {'veiculos': veiculos_do_banco})
 
 def CadastrarVeiculo(request):
+    aviso_reativar = False
+    veiculo_suspenso = None
+
     if request.method == 'POST':
-        form = VeiculoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('TelaVeiculos')
+        placa_digitada = request.POST.get('placa')
+        # Procura se existe essa Placa desativada no banco
+        veiculo_suspenso = Veiculo.objects.filter(placa=placa_digitada, ativo=False).first()
+
+        if veiculo_suspenso:
+            # Se o usuário confirmou a reativação do carro
+            if 'confirmar_reativacao' in request.POST:
+                veiculo_suspenso.ativo = True
+                
+                # Inteligência de Negócio: Se o dono do carro também estiver suspenso, reativa ele junto!
+                if not veiculo_suspenso.cliente.ativo:
+                    veiculo_suspenso.cliente.ativo = True
+                    veiculo_suspenso.cliente.save()
+                    
+                veiculo_suspenso.save()
+                return redirect('TelaVeiculos')
+            
+            aviso_reativar = True
+            form = VeiculoForm(request.POST)
+        else:
+            # Fluxo normal para placas novas
+            form = VeiculoForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('TelaVeiculos')
     else:
         form = VeiculoForm()
-    return render(request, 'oficina/Veiculo/FormVeiculos.html', {'form': form, 'titulo': 'Novo Cadastro de Veículo'})
+
+    return render(request, 'oficina/Veiculo/FormVeiculos.html', {
+        'form': form,
+        'aviso_reativar': aviso_reativar,
+        'veiculo_suspenso': veiculo_suspenso
+    })
 
 def DetalhesVeiculos(request, placa):
     veiculo = get_object_or_404(Veiculo, placa=placa)
@@ -242,3 +295,17 @@ def EditarCobranca(request, id):
     else:
         form = CobrancaForm(instance=cobranca)
     return render(request, 'oficina/Faturamento/FormCobranca.html', {'form': form, 'cobranca': cobranca})
+
+def HistoricoOSVeiculo(request, placa):
+    # 1. Busca o veículo pela placa ou dá erro 404 se não existir
+    veiculo = get_object_or_404(Veiculo, placa=placa)
+    
+    # 2. Busca todas as Ordens de Serviço vinculadas a este veículo
+    # Ordenamos por '-id' para as ordens mais recentes aparecerem primeiro
+    ordens = OrdemServico.objects.filter(veiculo=veiculo).order_by('-id')
+    
+    # 3. Renderiza a nova página passando o carro e a lista de OS
+    return render(request, 'oficina/Veiculo/HistoricoVeiculo.html', {
+        'veiculo': veiculo,
+        'ordens': ordens
+    })

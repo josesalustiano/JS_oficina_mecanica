@@ -28,4 +28,6 @@ urlpatterns = [
 
     path('faturamento/', views.TelaCobrancas, name='TelaCobrancas'),
     path('faturamento/<int:id>/editar/', views.EditarCobranca, name='EditarCobranca'),
+
+    path('veiculos/<str:placa>/historico/', views.HistoricoOSVeiculo, name='HistoricoOSVeiculo'),
 ]

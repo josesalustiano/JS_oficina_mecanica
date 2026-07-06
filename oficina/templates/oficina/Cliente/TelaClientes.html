@@ -66,12 +66,12 @@
                 <tbody>
                     {% for cliente in clientes %}
                     <tr>
-                        <td>
-                            <a href="{% url 'DetalhesClientes' cliente.id_seguro %}" class="text-decoration-none text-secondary">
+                        <td  class="py-3 px-3 fs-5">
+                            <a href="{% url 'DetalhesClientes' cliente.id_seguro %}" class="text-purple-highlight text-decoration-none hover-underline">
                                 {{ cliente.cpf }}
                             </a>
                         </td>
-                        <td class="fw-bold text-primary">{{ cliente.nome }}</td>
+                        <td class="text-secondary fw-medium">{{ cliente.nome }}</td>
                         <td class="text-secondary">{{ cliente.telefone }}</td>
                         <td class="text-center">
                             <a href="{% url 'EditarCliente' cliente.id_seguro %}" class="btn btn-sm btn-outline-warning fw-bold">Editar</a>
