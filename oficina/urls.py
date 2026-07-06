@@ -9,4 +9,8 @@ urlpatterns = [
     path('clientes/<str:hash_id>/', views.DetalhesClientes, name='DetalhesClientes'),
     path('clientes/<str:hash_id>/editar/', views.EditarCliente, name='EditarCliente'),
     path('clientes/<str:hash_id>/excluir/', views.ExcluirCliente, name='ExcluirCliente'),
+    path('veiculos/', views.TelaVeiculos, name='TelaVeiculos'),
+    path('veiculos/cadastrar/', views.CadastrarVeiculo, name='CadastrarVeiculo'),
+    path('veiculos/<int:id>/editar/', views.EditarVeiculo, name='EditarVeiculo'),
+    path('veiculos/<int:id>/excluir/', views.ExcluirVeiculo, name='ExcluirVeiculo'),
 ]
