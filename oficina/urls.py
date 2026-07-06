@@ -25,4 +25,7 @@ urlpatterns = [
     path('os/<int:id>/detalhes/', views.DetalhesOS, name='DetalhesOS'),
     path('os/<int:id>/editar/', views.EditarOS, name='EditarOS'),
     path('os/<int:id>/excluir/', views.ExcluirOS, name='ExcluirOS'),
+
+    path('faturamento/', views.TelaCobrancas, name='TelaCobrancas'),
+    path('faturamento/<int:id>/editar/', views.EditarCobranca, name='EditarCobranca'),
 ]
