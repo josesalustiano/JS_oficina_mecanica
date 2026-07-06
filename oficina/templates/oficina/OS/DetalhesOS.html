@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da OS #{{ ordem.id }} - JS Mecânica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-custom py-3 px-4">
+        <div class="container-fluid">
+            <span class="navbar-brand text-white mb-0 h1 fw-bold fs-3">JS Mecânica</span>
+            <a href="{% url 'TelaOS' %}" class="btn btn-outline-light px-4 py-2 rounded-3 fw-bold">⬅ Voltar para a Lista</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5" style="max-width: 900px;">
+        <div class="card shadow border-0 rounded-4 mb-5">
+            
+            <div class="card-header text-white fw-bold py-3 fs-5 d-flex justify-content-between align-items-center" style="background-color: #0b355c;">
+                <span>📋 Detalhes da Ordem de Serviço #{{ ordem.id }}</span>
+                <span>
+                    {% if ordem.status == 'ATIVO' %}
+                        <span class="badge bg-primary fs-6 px-3 py-2 rounded-3">ATIVO</span>
+                    {% elif ordem.status == 'FINALIZADO' %}
+                        <span class="badge bg-success fs-6 px-3 py-2 rounded-3">FINALIZADO</span>
+                    {% else %}
+                        <span class="badge bg-secondary fs-6 px-3 py-2 rounded-3">SUSPENSO</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="card-body bg-white p-4 p-md-5">
+                <div class="row g-5">
+                    
+                    <div class="col-md-6 border-end">
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">👤 Cliente e Veículo</h5>
+                        <p class="mb-2"><strong class="text-secondary">Cliente:</strong> <span class="fs-6 fw-medium">{{ ordem.veiculo.cliente.nome }}</span></p>
+                        <p class="mb-2"><strong class="text-secondary">Telefone:</strong> {{ ordem.veiculo.cliente.telefone|default:"Não informado" }}</p>
+                        <p class="mb-2"><strong class="text-secondary">Veículo:</strong> {{ ordem.veiculo.marca|default:"" }} {{ ordem.veiculo.modelo }}</p>
+                        <p class="mb-4"><strong class="text-secondary">Placa:</strong> <span class="badge bg-dark fs-6">{{ ordem.veiculo.placa }}</span></p>
+
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">📅 Histórico de Datas</h5>
+                        <p class="mb-2"><strong class="text-secondary">Abertura da OS:</strong> <br>{{ ordem.data_criacao|date:"d/m/Y às H:i" }}</p>
+                        <p class="mb-2"><strong class="text-secondary">Conclusão:</strong> <br>
+                            {% if ordem.data_conclusao %}
+                                <span class="text-success fw-bold">{{ ordem.data_conclusao|date:"d/m/Y às H:i" }}</span>
+                            {% else %}
+                                <span class="text-muted fst-italic">Aguardando finalização...</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">🛠️ Serviço Contratado</h5>
+                        <p class="mb-2"><strong class="text-secondary">Serviço:</strong> <span class="fs-6 fw-bold text-dark">{{ ordem.procedimento.nome }}</span></p>
+                        <p class="mb-2"><strong class="text-secondary">Tempo Estimado:</strong> {{ ordem.procedimento.tempo_estimado }}</p>
+                        <p class="mb-3"><strong class="text-secondary">Valor do Serviço:</strong> <span class="text-success fw-bold fs-5 d-block mt-1">R$ {{ ordem.procedimento.valor }}</span></p>
+                        
+                        <div class="mt-4 bg-light p-3 rounded-3 border">
+                            <strong class="d-block mb-2 text-dark">📝 Descrição Técnica do Serviço:</strong>
+                            <span class="small text-muted" style="line-height: 1.5;">
+                                {{ ordem.procedimento.descricao|default:"Nenhuma descrição detalhada cadastrada para este procedimento." }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-footer bg-light p-3 d-flex justify-content-end border-top rounded-bottom-4">
+                <a href="{% url 'EditarOS' ordem.id %}" class="btn btn-action-edit fw-bold px-4 py-2 rounded-3 shadow-sm">✏️ Alterar Status / Editar</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

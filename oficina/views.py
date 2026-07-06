@@ -195,6 +195,10 @@ def EditarOS(request, id):
         form = OrdemServicoForm(instance=ordem)
     return render(request, 'oficina/OS/FormOS.html', {'form': form, 'titulo': f'Editar OS #{ordem.id}'})
 
+def DetalhesOS(request, id):
+    ordem = get_object_or_404(OrdemServico, id=id)
+    return render(request, 'oficina/OS/DetalhesOS.html', {'ordem': ordem})
+
 def ExcluirOS(request, id):
     ordem = get_object_or_404(OrdemServico, id=id)
     if request.method == 'POST':
