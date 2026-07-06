@@ -4,6 +4,8 @@ from .models import Cliente
 from .forms import ClienteForm
 from .models import Cliente, Veiculo
 from .forms import ClienteForm, VeiculoForm
+from .models import Cliente, Veiculo, Procedimento
+from .forms import ClienteForm, VeiculoForm, ProcedimentoForm
 
 def decodificar_id(hash_id):
     try:
@@ -113,3 +115,35 @@ def ExcluirVeiculo(request, placa):
         veiculo.delete()
         return redirect('TelaVeiculos')
     return render(request, 'oficina/Veiculo/ExcluirVeiculo.html', {'veiculo': veiculo})
+
+def TelaProcedimentos(request):
+    procedimentos = Procedimento.objects.all()
+    return render(request, 'oficina/Procedimento/TelaProcedimentos.html', {'procedimentos': procedimentos})
+
+def CadastrarProcedimento(request):
+    if request.method == 'POST':
+        form = ProcedimentoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('TelaProcedimentos')
+    else:
+        form = ProcedimentoForm()
+    return render(request, 'oficina/Procedimento/FormProcedimentos.html', {'form': form, 'titulo': 'Novo Procedimento'})
+
+def EditarProcedimento(request, id):
+    procedimento = get_object_or_404(Procedimento, id=id)
+    if request.method == 'POST':
+        form = ProcedimentoForm(request.POST, instance=procedimento)
+        if form.is_valid():
+            form.save()
+            return redirect('TelaProcedimentos')
+    else:
+        form = ProcedimentoForm(instance=procedimento)
+    return render(request, 'oficina/Procedimento/FormProcedimentos.html', {'form': form, 'titulo': f'Editar Procedimento: {procedimento.nome}'})
+
+def ExcluirProcedimento(request, id):
+    procedimento = get_object_or_404(Procedimento, id=id)
+    if request.method == 'POST':
+        procedimento.delete()
+        return redirect('TelaProcedimentos')
+    return render(request, 'oficina/Procedimento/ExcluirProcedimento.html', {'procedimento': procedimento})
