@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Procedimento - JS Mecânica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-light">
+    <div class="container mt-5" style="max-width: 500px;">
+        <div class="card shadow border-0 rounded-4">
+            <div class="card-header bg-danger text-white fw-bold py-3">⚠️ CONFIRMAÇÃO DE EXCLUSÃO</div>
+            <div class="card-body bg-white text-center p-4">
+                <p class="fs-5 text-dark">
+                    Tem certeza que deseja remover o serviço <br>
+                    <strong class="text-danger">{{ procedimento.nome }}</strong>?
+                </p>
+                <p class="text-muted small">Isto não afetará Ordens de Serviço antigas, mas o serviço não poderá mais ser selecionado para novas OS.</p>
+                
+                <form method="POST" class="mt-4 d-flex justify-content-center gap-2">
+                    {% csrf_token %}
+                    <a href="{% url 'TelaProcedimentos' %}" class="btn btn-light fw-bold px-4 py-2 rounded-3 text-secondary">Não, Cancelar</a>
+                    <button type="submit" class="btn btn-danger fw-bold px-4 py-2 rounded-3">Sim, Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
