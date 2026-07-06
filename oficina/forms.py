@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente
+from .models import Cliente, Veiculo
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -15,4 +15,17 @@ class ClienteForm(forms.ModelForm):
             'rua': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Rua ou Logradouro'}),
             'numero': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nº'}),
             'bairro': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Bairro'}),
+        }
+
+class VeiculoForm(forms.ModelForm):
+    class Meta:
+        model = Veiculo
+        fields = ['cliente', 'placa', 'marca', 'modelo', 'ano']
+        
+        widgets = {
+            'cliente': forms.Select(attrs={'class': 'form-select'}),
+            'placa': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ABC-1234'}),
+            'marca': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Fiat, VW...'}),
+            'modelo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Uno, Gol...'}),
+            'ano': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '2020'}),
         }
