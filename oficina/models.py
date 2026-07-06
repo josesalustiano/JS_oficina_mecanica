@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 import base64
 
 class Cliente(models.Model):
@@ -60,13 +61,27 @@ class OrdemServico(models.Model):
 
 class Cobranca(models.Model):
     ordem_servico = models.OneToOneField(OrdemServico, on_delete=models.CASCADE)
+    
+    # Usando Decimal('0.00') no lugar do 0.00 solto
+    valor_adicional = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    
     valor_total = models.DecimalField(max_digits=10, decimal_places=2)
     data_emissao = models.DateField(auto_now_add=True)
-    # Campo auxiliar para os relatórios que você pediu de "Pagamentos em Aberto"
     paga = models.BooleanField(default=False) 
+    observacoes = models.TextField(blank=True, null=True, help_text="Ex: R$ 50 de óleo extra")
+
+    def save(self, *args, **kwargs):
+        # Convertemos os dois valores para Decimal explicitamente para o Python não reclamar
+        valor_proc = Decimal(str(self.ordem_servico.procedimento.valor))
+        
+        # Se não tiver valor adicional, usa 0.00
+        valor_add = Decimal(str(self.valor_adicional if self.valor_adicional else '0.00')) 
+        
+        self.valor_total = valor_proc + valor_add
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Cobrança da OS #{self.ordem_servico.id} - Paga: {self.paga}"
+        return f"Cobrança da OS #{self.ordem_servico.id} - Total: R$ {self.valor_total} (Paga: {self.paga})"
 
 class Pagamento(models.Model):
     cobranca = models.ForeignKey(Cobranca, on_delete=models.CASCADE)
