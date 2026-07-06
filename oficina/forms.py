@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Veiculo, Procedimento, OrdemServico
+from .models import Cliente, Veiculo, Procedimento, OrdemServico, Cobranca
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -51,4 +51,22 @@ class OrdemServicoForm(forms.ModelForm):
             'veiculo': forms.Select(attrs={'class': 'form-select'}),
             'procedimento': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+class CobrancaForm(forms.ModelForm):
+    class Meta:
+        model = Cobranca
+        # Permitimos editar apenas o valor adicional, as observações e o status de pagamento
+        fields = ['valor_adicional', 'observacoes', 'paga']
+        
+        widgets = {
+            'valor_adicional': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': '0.00'}),
+            'observacoes': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Ex: Adicionado R$ 50 referente ao óleo do motor e filtro.'}),
+            'paga': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+        
+        labels = {
+            'valor_adicional': 'Valor Adicional / Peças Extras (R$)',
+            'observacoes': 'Justificativa do Valor Adicional',
+            'paga': 'Marcar como CONFIRMADO / PAGO',
         }
