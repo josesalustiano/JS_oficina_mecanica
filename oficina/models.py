@@ -36,7 +36,7 @@ class Veiculo(models.Model):
 class Procedimento(models.Model):
     nome = models.CharField(max_length=100)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
-    tempo_estimado_minutos = models.IntegerField(help_text="Tempo estimado em minutos")
+    tempo_estimado = models.CharField(max_length=50, help_text="Ex: 2 dias, 45 min, etc.")
     descricao = models.TextField(blank=True, null=True)
 
     def __str__(self):
