@@ -83,6 +83,10 @@ def CadastrarVeiculo(request):
         form = VeiculoForm()
     return render(request, 'oficina/Veiculo/FormVeiculos.html', {'form': form, 'titulo': 'Novo Cadastro de Veículo'})
 
+def DetalhesVeiculos(request, placa):
+    veiculo = get_object_or_404(Veiculo, placa=placa)
+    return render(request, 'oficina/Veiculo/DetalhesVeiculos.html', {'veiculo': veiculo})
+
 def EditarVeiculo(request, placa):
     # Agora procura pela placa em vez do id
     veiculo = get_object_or_404(Veiculo, placa=placa)

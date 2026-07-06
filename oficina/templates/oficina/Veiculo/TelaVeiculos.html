@@ -101,7 +101,11 @@
                 <tbody class="border-top-0 text-dark">
                     {% for v in veiculos %}
                     <tr>
-                        <td class="py-3 px-3 text-purple-highlight fs-5">{{ v.placa }}</td>
+                        <td class="py-3 px-3 fs-5">
+                            <a href="{% url 'DetalhesVeiculos' v.placa %}" class="text-purple-highlight text-decoration-none hover-underline">
+                                {{ v.placa }}
+                            </a>
+                        </td>
                         <td>{{ v.modelo }}</td>
                         <td class="text-secondary fw-medium">{{ v.cliente.nome }}</td>
                         <td class="text-center">

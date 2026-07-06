@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Veículo - JS Mecânica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark py-3 px-4" style="background-color: #0b355c;">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1 fw-bold fs-3">JS Mecânica</span>
+            <a href="{% url 'TelaVeiculos' %}" class="btn btn-outline-light px-4 py-2 rounded-3">Voltar à Lista</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5" style="max-width: 800px;">
+        <div class="card shadow border-0 rounded-4 mb-4">
+            <div class="card-header text-white fw-bold py-3 fs-5 d-flex justify-content-between align-items-center" style="background-color: #9333ea;">
+                <span>🚗 Ficha do Veículo: {{ veiculo.placa }}</span>
+                <span class="badge bg-light text-dark fs-6">{{ veiculo.ano }}</span>
+            </div>
+            
+            <div class="card-body bg-white p-4">
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Proprietário (Cliente)</p>
+                        <p class="fs-5 text-dark fw-medium m-0">{{ veiculo.cliente.nome }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Placa</p>
+                        <p class="fs-5 text-dark fw-medium m-0">{{ veiculo.placa }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Marca</p>
+                        <p class="fs-5 text-dark fw-medium m-0">{{ veiculo.marca }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Modelo</p>
+                        <p class="fs-5 text-dark fw-medium m-0">{{ veiculo.modelo }}</p>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 border-top pt-4 mt-2">
+                    <a href="{% url 'ExcluirVeiculo' veiculo.placa %}" class="btn btn-outline-danger fw-bold px-4 py-2 rounded-3">Excluir</a>
+                    <a href="{% url 'EditarVeiculo' veiculo.placa %}" class="btn text-white fw-bold px-4 py-2 rounded-3" style="background-color: #f3a73c;">Editar Dados</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-white border-bottom fw-bold py-3 text-secondary">
+                📋 Histórico de Ordens de Serviço (Em Breve)
+            </div>
+            <div class="card-body bg-light text-center p-5">
+                <p class="text-muted mb-0">Nenhum serviço registrado para este veículo ainda.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
