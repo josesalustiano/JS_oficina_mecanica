@@ -1,0 +1,79 @@
+.navbar-custom {
+    background-color: #0b3560 !important; /* Azul escuro padrão */
+}
+
+/* --- BOTÕES PERSONALIZADOS --- */
+.btn-sair, .btn-action-edit {
+    background-color: #f3a73c; /* Laranja padrão */
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+.btn-sair:hover, .btn-action-edit:hover {
+    background-color: #e09228;
+    color: white;
+}
+
+/* Destaque Roxo */
+.text-purple-highlight {
+    color: #9333ea !important;
+    font-weight: bold;
+}
+.hover-underline:hover {
+    text-decoration: underline !important;
+}
+
+/* --- ESTILOS DA DASHBOARD --- */
+.module-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 140px;
+    background-color: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.module-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+.module-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #9333ea;
+    text-align: center;
+}
+.module-card-equipe {
+    background-color: #f3a73c;
+    border: none;
+}
+.module-card-equipe .module-text {
+    color: white;
+}
+
+/* --- MENU SUPERIOR DE NAVEGAÇÃO DOS MÓDULOS (O que criamos em Veículos) --- */
+.nav-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    transition: all 0.2s;
+    text-decoration: none;
+    min-width: 110px;
+    text-align: center;
+}
+.nav-card:hover, .nav-card.active {
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: #ced4da;
+}
+.nav-card.active {
+    border: 2px solid #212529;
+}

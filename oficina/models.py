@@ -24,8 +24,8 @@ class Veiculo(models.Model):
     placa = models.CharField(max_length=10, primary_key=True)
     # Relação com o Cliente usa o CPF dele por baixo dos panos automaticamente
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    marca = models.CharField(max_length=50, default="Não informada")
-    modelo = models.CharField(max_length=50, default="Não informado")
+    marca = models.CharField(max_length=50, default="")
+    modelo = models.CharField(max_length=50, default="")
     ano = models.IntegerField()
     categoria = models.CharField(max_length=50, blank=True, null=True) 
     cor = models.CharField(max_length=30)
