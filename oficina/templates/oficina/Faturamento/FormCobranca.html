@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustar Cobrança OS #{{ cobranca.ordem_servico.id }} - JS Mecânica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-custom py-3 px-4">
+        <div class="container-fluid">
+            <span class="navbar-brand text-white mb-0 h1 fw-bold fs-3">JS Mecânica</span>
+            <a href="{% url 'TelaCobrancas' %}" class="btn btn-outline-light px-4 py-2 rounded-3">Voltar ao Faturamento</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5" style="max-width: 650px;">
+        <div class="card shadow border-0 rounded-4 mb-5">
+            <div class="card-header text-white fw-bold py-3 fs-5" style="background-color: #0b355c;">
+                💰 Gerenciar Financeiro - OS #{{ cobranca.ordem_servico.id }}
+            </div>
+            <div class="card-body bg-white p-4">
+                
+                <div class="bg-light p-3 rounded-3 mb-4 border border-secondary-subtle">
+                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-2">📋 Resumo do Serviço original</h6>
+                    <div class="row g-2 small text-secondary">
+                        <div class="col-6"><strong>Cliente:</strong> {{ cobranca.ordem_servico.veiculo.cliente.nome }}</div>
+                        <div class="col-6"><strong>Veículo / Placa:</strong> {{ cobranca.ordem_servico.veiculo.placa }}</div>
+                        <div class="col-6"><strong>Procedimento:</strong> {{ cobranca.ordem_servico.procedimento.nome }}</div>
+                        <div class="col-6"><strong>Mão de Obra Base:</strong> <span class="text-success fw-bold">R$ {{ cobranca.ordem_servico.procedimento.valor }}</span></div>
+                    </div>
+                </div>
+
+                <form method="POST" autocomplete="off">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark mb-1">{{ form.valor_adicional.label }}</label>
+                        {{ form.valor_adicional }}
+                        <div class="form-text text-muted">Digite o valor somado de peças extras, parafusos, óleos etc.</div>
+                        {% if form.valor_adicional.errors %}
+                            <div class="text-danger small mt-1 fw-medium">{{ form.valor_adicional.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark mb-1">{{ form.observacoes.label }}</label>
+                        {{ form.observacoes }}
+                        {% if form.observacoes.errors %}
+                            <div class="text-danger small mt-1 fw-medium">{{ form.observacoes.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mt-4">
+                        <div>
+                            <label class="form-check-label fw-bold text-dark d-block mb-0" for="{{ form.paga.id_for_label }}">
+                                {{ form.paga.label }}
+                            </label>
+                            <small class="text-muted">Marque essa caixa somente se o cliente já tiver efetuado o pagamento.</small>
+                        </div>
+                        <div class="form-check form-switch fs-4 p-0 m-0">
+                            {{ form.paga }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+                        <a href="{% url 'TelaCobrancas' %}" class="btn btn-light fw-bold px-4 py-2 rounded-3 text-secondary">Cancelar</a>
+                        <button type="submit" class="btn text-white fw-bold px-4 py-2 rounded-3" style="background-color: #0b355c;">
+                            Salvar Alterações Financeiras
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
