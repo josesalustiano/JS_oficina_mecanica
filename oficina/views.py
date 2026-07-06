@@ -1,4 +1,5 @@
 import base64
+from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Cliente
 from .forms import ClienteForm
@@ -6,6 +7,8 @@ from .models import Cliente, Veiculo
 from .forms import ClienteForm, VeiculoForm
 from .models import Cliente, Veiculo, Procedimento
 from .forms import ClienteForm, VeiculoForm, ProcedimentoForm
+from .models import Cliente, Veiculo, Procedimento, OrdemServico
+from .forms import ClienteForm, VeiculoForm, ProcedimentoForm, OrdemServicoForm
 
 def decodificar_id(hash_id):
     try:
@@ -147,3 +150,54 @@ def ExcluirProcedimento(request, id):
         procedimento.delete()
         return redirect('TelaProcedimentos')
     return render(request, 'oficina/Procedimento/ExcluirProcedimento.html', {'procedimento': procedimento})
+
+def TelaOS(request):
+    # Trazemos todas as OS, ordenadas pelas mais recentes primeiro
+    ordens = OrdemServico.objects.all().order_by('-data_criacao')
+    return render(request, 'oficina/OS/TelaOS.html', {'ordens': ordens})
+
+def CadastrarOS(request):
+    if request.method == 'POST':
+        form = OrdemServicoForm(request.POST)
+        if form.is_valid():
+            # commit=False faz o Django preparar o objeto mas não salvar no banco ainda
+            ordem = form.save(commit=False)
+            
+            # Se já nascer finalizada, coloca a data atual
+            if ordem.status == 'FINALIZADO':
+                ordem.data_conclusao = timezone.now()
+                
+            ordem.save() # Agora sim, salva no banco de dados
+            return redirect('TelaOS')
+    else:
+        form = OrdemServicoForm()
+    return render(request, 'oficina/OS/FormOS.html', {'form': form, 'titulo': 'Nova Ordem de Serviço'})
+
+def EditarOS(request, id):
+    ordem = get_object_or_404(OrdemServico, id=id)
+    if request.method == 'POST':
+        form = OrdemServicoForm(request.POST, instance=ordem)
+        if form.is_valid():
+            ordem_editada = form.save(commit=False)
+            
+            # REGRA DE NEGÓCIO: Se o status virou FINALIZADO
+            if ordem_editada.status == 'FINALIZADO':
+                # Só bota a data se ela já não tiver sido preenchida antes (evita atualizar a data toda vez que re-editar uma OS finalizada)
+                if not ordem_editada.data_conclusao:
+                    ordem_editada.data_conclusao = timezone.now()
+            else:
+                # Se mudou de Finalizado de volta para Ativo ou Suspenso, remove a data de conclusão
+                ordem_editada.data_conclusao = None
+                
+            ordem_editada.save()
+            return redirect('TelaOS')
+    else:
+        form = OrdemServicoForm(instance=ordem)
+    return render(request, 'oficina/OS/FormOS.html', {'form': form, 'titulo': f'Editar OS #{ordem.id}'})
+
+def ExcluirOS(request, id):
+    ordem = get_object_or_404(OrdemServico, id=id)
+    if request.method == 'POST':
+        ordem.delete()
+        return redirect('TelaOS')
+    return render(request, 'oficina/OS/ExcluirOS.html', {'ordem': ordem})
