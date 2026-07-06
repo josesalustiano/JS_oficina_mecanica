@@ -11,6 +11,6 @@ urlpatterns = [
     path('clientes/<str:hash_id>/excluir/', views.ExcluirCliente, name='ExcluirCliente'),
     path('veiculos/', views.TelaVeiculos, name='TelaVeiculos'),
     path('veiculos/cadastrar/', views.CadastrarVeiculo, name='CadastrarVeiculo'),
-    path('veiculos/<int:id>/editar/', views.EditarVeiculo, name='EditarVeiculo'),
-    path('veiculos/<int:id>/excluir/', views.ExcluirVeiculo, name='ExcluirVeiculo'),
+    path('veiculos/<str:placa>/editar/', views.EditarVeiculo, name='EditarVeiculo'),
+    path('veiculos/<str:placa>/excluir/', views.ExcluirVeiculo, name='ExcluirVeiculo'),
 ]
