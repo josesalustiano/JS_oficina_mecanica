@@ -83,8 +83,9 @@ def CadastrarVeiculo(request):
         form = VeiculoForm()
     return render(request, 'oficina/Veiculo/FormVeiculos.html', {'form': form, 'titulo': 'Novo Cadastro de Veículo'})
 
-def EditarVeiculo(request, id):
-    veiculo = get_object_or_404(Veiculo, id=id)
+def EditarVeiculo(request, placa):
+    # Agora procura pela placa em vez do id
+    veiculo = get_object_or_404(Veiculo, placa=placa)
     
     if request.method == 'POST':
         form = VeiculoForm(request.POST, instance=veiculo)
@@ -100,8 +101,9 @@ def EditarVeiculo(request, id):
         'titulo': f'Editar Veículo: {veiculo.placa}'
     })
 
-def ExcluirVeiculo(request, id):
-    veiculo = get_object_or_404(Veiculo, id=id)
+def ExcluirVeiculo(request, placa):
+    # Agora procura pela placa
+    veiculo = get_object_or_404(Veiculo, placa=placa)
     
     if request.method == 'POST':
         veiculo.delete()

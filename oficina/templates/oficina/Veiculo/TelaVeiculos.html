@@ -76,14 +76,6 @@
                 <div class="fs-3">🔧</div>
                 <div class="fw-bold small mt-1 text-muted">Procedimentos</div>
             </a>
-            <a href="#" class="nav-card p-3">
-                <div class="fs-3">📦</div>
-                <div class="fw-bold small mt-1 text-muted">Insumos</div>
-            </a>
-            <a href="#" class="nav-card p-3 text-white border-0" style="background-color: #f3a73c;">
-                <div class="fs-3">⚙️</div>
-                <div class="fw-bold small mt-1">Gerenciar Equipe</div>
-            </a>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -101,9 +93,7 @@
                 <thead class="table-light text-secondary fw-semibold">
                     <tr>
                         <th class="py-3 px-3">Placa</th>
-                        <th class="py-3">Marca</th>
                         <th class="py-3">Modelo</th>
-                        <th class="py-3">Ano</th>
                         <th class="py-3">Proprietário (Cliente)</th>
                         <th class="py-3 text-center">Ações</th>
                     </tr>
@@ -112,14 +102,12 @@
                     {% for v in veiculos %}
                     <tr>
                         <td class="py-3 px-3 text-purple-highlight fs-5">{{ v.placa }}</td>
-                        <td>{{ v.marca }}</td>
                         <td>{{ v.modelo }}</td>
-                        <td>{{ v.ano }}</td>
                         <td class="text-secondary fw-medium">{{ v.cliente.nome }}</td>
                         <td class="text-center">
                             <div class="d-inline-flex gap-2">
-                                <a href="{% url 'EditarVeiculo' v.id %}" class="btn btn-sm btn-action-edit fw-bold px-3 py-1.5 rounded-2">Editar</a>
-                                <a href="{% url 'ExcluirVeiculo' v.id %}" class="btn btn-sm btn-danger fw-bold px-3 py-1.5 rounded-2">Excluir</a>
+                                <a href="{% url 'EditarVeiculo' v.placa %}" class="btn btn-sm btn-action-edit fw-bold px-3 py-1.5 rounded-2">Editar</a>
+                                <a href="{% url 'ExcluirVeiculo' v.placa %}" class="btn btn-sm btn-danger fw-bold px-3 py-1.5 rounded-2">Excluir</a>
                             </div>
                         </td>
                     </tr>
