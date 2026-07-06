@@ -24,7 +24,7 @@ def TelaClientes(request):
     if busca:
         clientes_do_banco = Cliente.objects.filter(nome__icontains=busca) | Cliente.objects.filter(cpf__icontains=busca)
     else:
-        clientes_do_banco = Cliente.objects.all() 
+        clientes_do_banco = Cliente.objects.filter(ativo=True)
     # Apontando para a nova subpasta Cliente
     return render(request, 'oficina/Cliente/TelaClientes.html', {'clientes': clientes_do_banco})
 
@@ -65,9 +65,13 @@ def ExcluirCliente(request, hash_id):
     cliente = get_object_or_404(Cliente, cpf=cpf_real)
     
     if request.method == 'POST':
-        cliente.delete()
+        cliente.ativo = False
+        cliente.save()
+
+        Veiculo.objects.filter(cliente=cliente).update(ativo=False)
+        
         return redirect('TelaClientes')
-    # Apontando para a nova subpasta Cliente
+
     return render(request, 'oficina/Cliente/ExcluirCliente.html', {'cliente': cliente})
 
 # ==========================================
@@ -75,7 +79,7 @@ def ExcluirCliente(request, hash_id):
 # ==========================================
 
 def TelaVeiculos(request):
-    veiculos_do_banco = Veiculo.objects.all() 
+    veiculos_do_banco = Veiculo.objects.filter(ativo=True)
     return render(request, 'oficina/Veiculo/TelaVeiculos.html', {'veiculos': veiculos_do_banco})
 
 def CadastrarVeiculo(request):
@@ -111,12 +115,14 @@ def EditarVeiculo(request, placa):
     })
 
 def ExcluirVeiculo(request, placa):
-    # Agora procura pela placa
     veiculo = get_object_or_404(Veiculo, placa=placa)
     
     if request.method == 'POST':
-        veiculo.delete()
+        veiculo.ativo = False
+        veiculo.save()
+        
         return redirect('TelaVeiculos')
+
     return render(request, 'oficina/Veiculo/ExcluirVeiculo.html', {'veiculo': veiculo})
 
 def TelaProcedimentos(request):

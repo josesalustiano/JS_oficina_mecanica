@@ -11,6 +11,7 @@ class Cliente(models.Model):
     numero = models.CharField(max_length=10, blank=True, null=True)
     bairro = models.CharField(max_length=50, blank=True, null=True)
     cidade = models.CharField(max_length=50, blank=True, null=True)
+    ativo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nome
@@ -30,6 +31,7 @@ class Veiculo(models.Model):
     ano = models.IntegerField()
     categoria = models.CharField(max_length=50, blank=True, null=True) 
     cor = models.CharField(max_length=30)
+    ativo = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.marca} {self.modelo} ({self.ano}) - Placa: {self.placa}"

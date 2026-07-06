@@ -20,15 +20,19 @@ class ClienteForm(forms.ModelForm):
 class VeiculoForm(forms.ModelForm):
     class Meta:
         model = Veiculo
-        fields = ['cliente', 'placa', 'marca', 'modelo', 'ano']
+        fields = ['cliente', 'placa', 'marca', 'modelo', 'ano', 'cor']
         
         widgets = {
-            'cliente': forms.Select(attrs={'class': 'form-select'}),
+            'cliente': forms.Select(attrs={'class': 'form-select select2-search'}),
             'placa': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ABC-1234'}),
             'marca': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Fiat, VW...'}),
             'modelo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Uno, Gol...'}),
+            'cor': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Preto, Vermelho...'}),
             'ano': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '2020'}),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['cliente'].queryset = Cliente.objects.filter(ativo=True)    
 
 class ProcedimentoForm(forms.ModelForm):
     class Meta:
