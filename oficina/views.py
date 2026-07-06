@@ -2,6 +2,8 @@ import base64
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Cliente
 from .forms import ClienteForm
+from .models import Cliente, Veiculo
+from .forms import ClienteForm, VeiculoForm
 
 def decodificar_id(hash_id):
     try:
@@ -62,3 +64,46 @@ def ExcluirCliente(request, hash_id):
         return redirect('TelaClientes')
     # Apontando para a nova subpasta Cliente
     return render(request, 'oficina/Cliente/ExcluirCliente.html', {'cliente': cliente})
+
+# ==========================================
+# MÓDULO DE VEÍCULOS
+# ==========================================
+
+def TelaVeiculos(request):
+    veiculos_do_banco = Veiculo.objects.all() 
+    return render(request, 'oficina/Veiculo/TelaVeiculos.html', {'veiculos': veiculos_do_banco})
+
+def CadastrarVeiculo(request):
+    if request.method == 'POST':
+        form = VeiculoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('TelaVeiculos')
+    else:
+        form = VeiculoForm()
+    return render(request, 'oficina/Veiculo/FormVeiculos.html', {'form': form, 'titulo': 'Novo Cadastro de Veículo'})
+
+def EditarVeiculo(request, id):
+    veiculo = get_object_or_404(Veiculo, id=id)
+    
+    if request.method == 'POST':
+        form = VeiculoForm(request.POST, instance=veiculo)
+        if form.is_valid():
+            form.save()
+            return redirect('TelaVeiculos')
+    else:
+        form = VeiculoForm(instance=veiculo)
+    
+    return render(request, 'oficina/Veiculo/FormVeiculos.html', {
+        'form': form, 
+        'veiculo': veiculo, 
+        'titulo': f'Editar Veículo: {veiculo.placa}'
+    })
+
+def ExcluirVeiculo(request, id):
+    veiculo = get_object_or_404(Veiculo, id=id)
+    
+    if request.method == 'POST':
+        veiculo.delete()
+        return redirect('TelaVeiculos')
+    return render(request, 'oficina/Veiculo/ExcluirVeiculo.html', {'veiculo': veiculo})
