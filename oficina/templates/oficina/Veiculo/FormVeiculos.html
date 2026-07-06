@@ -11,17 +11,41 @@
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark py-3 px-4" style="background-color: #0b355c;">
+    <nav class="navbar navbar-custom py-3 px-4">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1 fw-bold fs-3">JS Mecânica</span>
-            <a href="{% url 'TelaVeiculos' %}" class="btn btn-outline-light px-4 py-2 rounded-3">Voltar à Lista</a>
+            <a class="navbar-brand text-white mb-0 h1 fw-bold fs-3 ms-3" href="{% url 'Dashboard' %}">JS Mecânica</a>
         </div>
     </nav>
 
-    <div class="container mt-5" style="max-width: 600px;">
+    <div class="container mt-4 bg-white p-4 rounded-4 shadow-sm mb-5">
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap border-bottom pb-4 mb-4">
+            <a href="{% url 'TelaClientes' %}" class="nav-card p-3">
+                <div class="fs-3">👥</div>
+                <div class="fw-bold small mt-1 text-muted">Clientes</div>
+            </a>
+            <a href="{% url 'TelaVeiculos' %}" class="nav-card p-3 active">
+                <div class="fs-3">🚗</div>
+                <div class="fw-bold small mt-1 text-muted">Veículos</div>
+            </a>
+            <a href="{% url 'TelaProcedimentos' %}" class="nav-card p-3">
+                <div class="fs-3">🛠️</div>
+                <div class="fw-bold small mt-1 text-muted">Procedimentos</div>
+            </a>
+            <a href="{% url 'TelaOS' %}" class="nav-card p-3">
+                <div class="fs-3">📋</div>
+                <div class="fw-bold small mt-1 text-muted">Ordens de Serviço</div>
+            </a>
+            <a href="{% url 'TelaCobrancas' %}" class="nav-card p-3">
+                <div class="fs-3">💰</div>
+                <div class="fw-bold small mt-1 text-purple-highlight">Faturamento</div>
+            </a>
+        </div>
+
+        <div class="container mt-5" style="max-width: 600px;">
         <div class="card shadow border-0 rounded-4">
             <div class="card-header text-white fw-bold py-3 fs-5" style="background-color: #0b355c;">
-                📂 {{ titulo }}
+                📂 Preencha os campos abaixo
             </div>
             <div class="card-body bg-white p-4">
                 {% if aviso_reativar %}
