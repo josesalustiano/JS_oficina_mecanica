@@ -19,4 +19,10 @@ urlpatterns = [
     path('procedimentos/cadastrar/', views.CadastrarProcedimento, name='CadastrarProcedimento'),
     path('procedimentos/<int:id>/editar/', views.EditarProcedimento, name='EditarProcedimento'),
     path('procedimentos/<int:id>/excluir/', views.ExcluirProcedimento, name='ExcluirProcedimento'),
+
+    path('os/', views.TelaOS, name='TelaOS'),
+    path('os/cadastrar/', views.CadastrarOS, name='CadastrarOS'),
+    path('os/<int:id>/detalhes/', views.DetalhesOS, name='DetalhesOS'),
+    path('os/<int:id>/editar/', views.EditarOS, name='EditarOS'),
+    path('os/<int:id>/excluir/', views.ExcluirOS, name='ExcluirOS'),
 ]
