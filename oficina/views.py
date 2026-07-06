@@ -7,8 +7,8 @@ from .models import Cliente, Veiculo
 from .forms import ClienteForm, VeiculoForm
 from .models import Cliente, Veiculo, Procedimento
 from .forms import ClienteForm, VeiculoForm, ProcedimentoForm
-from .models import Cliente, Veiculo, Procedimento, OrdemServico
-from .forms import ClienteForm, VeiculoForm, ProcedimentoForm, OrdemServicoForm
+from .models import Cliente, Veiculo, Procedimento, OrdemServico, Cobranca
+from .forms import ClienteForm, VeiculoForm, ProcedimentoForm, OrdemServicoForm, CobrancaForm
 
 def decodificar_id(hash_id):
     try:
@@ -156,18 +156,24 @@ def TelaOS(request):
     ordens = OrdemServico.objects.all().order_by('-data_criacao')
     return render(request, 'oficina/OS/TelaOS.html', {'ordens': ordens})
 
+from .models import Cliente, Veiculo, Procedimento, OrdemServico, Cobranca # Garanta que Cobranca está aqui
+
 def CadastrarOS(request):
     if request.method == 'POST':
         form = OrdemServicoForm(request.POST)
         if form.is_valid():
-            # commit=False faz o Django preparar o objeto mas não salvar no banco ainda
             ordem = form.save(commit=False)
-            
-            # Se já nascer finalizada, coloca a data atual
             if ordem.status == 'FINALIZADO':
                 ordem.data_conclusao = timezone.now()
+            ordem.save()
+            
+            # AUTOMAÇÃO: Se nasceu FINALIZADO, cria a cobrança automática
+            if ordem.status == 'FINALIZADO':
+                Cobranca.objects.get_or_create(
+                    ordem_servico=ordem,
+                    defaults={'valor_total': ordem.procedimento.valor}
+                )
                 
-            ordem.save() # Agora sim, salva no banco de dados
             return redirect('TelaOS')
     else:
         form = OrdemServicoForm()
@@ -180,21 +186,30 @@ def EditarOS(request, id):
         if form.is_valid():
             ordem_editada = form.save(commit=False)
             
-            # REGRA DE NEGÓCIO: Se o status virou FINALIZADO
             if ordem_editada.status == 'FINALIZADO':
-                # Só bota a data se ela já não tiver sido preenchida antes (evita atualizar a data toda vez que re-editar uma OS finalizada)
                 if not ordem_editada.data_conclusao:
                     ordem_editada.data_conclusao = timezone.now()
             else:
-                # Se mudou de Finalizado de volta para Ativo ou Suspenso, remove a data de conclusão
                 ordem_editada.data_conclusao = None
                 
             ordem_editada.save()
+            
+            # AUTOMAÇÃO: Se mudou o status para FINALIZADO na edição, cria a cobrança
+            if ordem_editada.status == 'FINALIZADO':
+                Cobranca.objects.get_or_create(
+                    ordem_servico=ordem_editada,
+                    defaults={'valor_total': ordem_editada.procedimento.valor}
+                )
+            else:
+                # Opcional: Se reabrir a OS (mudar de Finalizado para Ativo), 
+                # podemos deletar a cobrança se ela não estiver paga ainda
+                if hasattr(ordem_editada, 'cobranca') and not ordem_editada.cobranca.paga:
+                    ordem_editada.cobranca.delete()
+                    
             return redirect('TelaOS')
     else:
         form = OrdemServicoForm(instance=ordem)
     return render(request, 'oficina/OS/FormOS.html', {'form': form, 'titulo': f'Editar OS #{ordem.id}'})
-
 def DetalhesOS(request, id):
     ordem = get_object_or_404(OrdemServico, id=id)
     return render(request, 'oficina/OS/DetalhesOS.html', {'ordem': ordem})
@@ -205,3 +220,19 @@ def ExcluirOS(request, id):
         ordem.delete()
         return redirect('TelaOS')
     return render(request, 'oficina/OS/ExcluirOS.html', {'ordem': ordem})
+
+def TelaCobrancas(request):
+    # Traz todas as cobranças geradas, mostrando as mais novas primeiro
+    cobrancas = Cobranca.objects.all().order_by('-data_emissao', '-id')
+    return render(request, 'oficina/Faturamento/TelaCobrancas.html', {'cobrancas': cobrancas})
+
+def EditarCobranca(request, id):
+    cobranca = get_object_or_404(Cobranca, id=id)
+    if request.method == 'POST':
+        form = CobrancaForm(request.POST, instance=cobranca)
+        if form.is_valid():
+            form.save() # O save() customizado que fizemos no models vai atualizar o valor_total automaticamente!
+            return redirect('TelaCobrancas')
+    else:
+        form = CobrancaForm(instance=cobranca)
+    return render(request, 'oficina/Faturamento/FormCobranca.html', {'form': form, 'cobranca': cobranca})
