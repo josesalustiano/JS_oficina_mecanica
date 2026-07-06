@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Veiculo, Procedimento
+from .models import Cliente, Veiculo, Procedimento, OrdemServico
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -40,4 +40,15 @@ class ProcedimentoForm(forms.ModelForm):
             'valor': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ex: 150.00', 'step': '0.01'}),
             'tempo_estimado': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: 20 dias, 2 horas, 45 min'}),
             'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Detalhes adicionais sobre o serviço...'}),
+        }
+
+class OrdemServicoForm(forms.ModelForm):
+    class Meta:
+        model = OrdemServico
+        fields = ['veiculo', 'procedimento', 'status']
+        
+        widgets = {
+            'veiculo': forms.Select(attrs={'class': 'form-select'}),
+            'procedimento': forms.Select(attrs={'class': 'form-select'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
         }
