@@ -49,11 +49,12 @@ class ProcedimentoForm(forms.ModelForm):
 class OrdemServicoForm(forms.ModelForm):
     class Meta:
         model = OrdemServico
-        fields = ['veiculo', 'procedimento', 'status']
+        fields = ['veiculo', 'procedimento', 'descricao', 'status']
         
         widgets = {
             'veiculo': forms.Select(attrs={'class': 'form-select'}),
             'procedimento': forms.Select(attrs={'class': 'form-select'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Ex: Cliente relatou barulho na roda dianteira direita...'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
 

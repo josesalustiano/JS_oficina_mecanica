@@ -54,6 +54,7 @@ class OrdemServico(models.Model):
     # A OS agora aponta diretamente para a Placa do Veículo
     veiculo = models.ForeignKey(Veiculo, on_delete=models.PROTECT)
     procedimento = models.ForeignKey(Procedimento, on_delete=models.PROTECT)
+    descricao = models.TextField(blank=True, null=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_conclusao = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='ATIVO')
