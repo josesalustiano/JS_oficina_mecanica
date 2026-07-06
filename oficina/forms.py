@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Veiculo
+from .models import Cliente, Veiculo, Procedimento
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -28,4 +28,16 @@ class VeiculoForm(forms.ModelForm):
             'marca': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Fiat, VW...'}),
             'modelo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Uno, Gol...'}),
             'ano': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '2020'}),
+        }
+
+class ProcedimentoForm(forms.ModelForm):
+    class Meta:
+        model = Procedimento
+        fields = ['nome', 'valor', 'tempo_estimado_minutos', 'descricao']
+        
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Troca de Óleo'}),
+            'valor': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ex: 150.00', 'step': '0.01'}),
+            'tempo_estimado_minutos': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ex: 60'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Detalhes adicionais sobre o serviço...'}),
         }
